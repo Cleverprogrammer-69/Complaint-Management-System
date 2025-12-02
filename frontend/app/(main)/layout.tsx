@@ -6,6 +6,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { HeaderNav } from "@/components/header-nav"
 import { ReduxProvider } from "@/lib/providers"
+import { Toaster } from "@/components/ui/sonner"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -30,6 +31,7 @@ export default function RootLayout({
               <HeaderNav />
               <main className="flex-1 p-4">{children}</main>
             </SidebarInset>
+            <Toaster />
           </SidebarProvider>
         </ReduxProvider>
       </body>

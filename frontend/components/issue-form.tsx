@@ -13,7 +13,7 @@ import { useEffect } from "react"
 
 const issueSchema = z.object({
   issue_type: z
-    .string()
+    .string().trim()
     .min(1, "Issue type is required")
     .min(2, "Issue type must be at least 2 characters")
     .max(50, "Issue type must be less than 50 characters"),
@@ -28,6 +28,7 @@ interface IssueFormProps {
 
 export function IssueForm({ editingIssue, onCancelEdit }: IssueFormProps) {
   const [createIssue, { isLoading: isCreating }] = useCreateIssueMutation()
+  const[] = useCreateIssueMutation()
   const [updateIssue, { isLoading: isUpdating }] = useUpdateIssueMutation()
 
   const isLoading = isCreating || isUpdating
@@ -59,7 +60,7 @@ export function IssueForm({ editingIssue, onCancelEdit }: IssueFormProps) {
       }
       form.reset()
     } catch (error) {
-      console.error("Failed to save issue:", error)
+      console.log("Failed to save issue:", error)
     }
   }
 

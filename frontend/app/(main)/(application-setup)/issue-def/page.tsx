@@ -25,7 +25,6 @@ export default function IssueDefPage() {
   const [deletingIssue, setDeletingIssue] = useState<Issue | null>(null)
   const { data: issues, isLoading, isError, refetch } = useGetIssuesQuery()
   const [deleteIssue, { isLoading: isDeleting }] = useDeleteIssueMutation()
-
   async function handleDelete() {
     if (!deletingIssue) return
     try {
