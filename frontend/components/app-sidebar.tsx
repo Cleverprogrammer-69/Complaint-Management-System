@@ -12,6 +12,7 @@ import {
   Users,
   GalleryVerticalEnd,
   Home,
+  AlertOctagon,
 } from "lucide-react";
 
 import { SearchForm } from "@/components/search-form";
@@ -39,6 +40,7 @@ const data = {
   standaloneItems: [
     { title: "Home", url: "/", icon: Home },
     { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+    { title: "Complaints", url: "/complaints", icon: AlertOctagon },
   ],
   navMain: [
     {

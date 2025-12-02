@@ -17,11 +17,11 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 import React from "react"
 
 const labelMap: Record<string, string> = {
-  "application-setup": "Application Setup",
   "issue-def": "Issue Def",
   "department-def": "Department Def",
   "company-def": "Company Def",
   "user-def": "User Def",
+  "complaints": "Complaints",
 }
 
 export function HeaderNav() {
