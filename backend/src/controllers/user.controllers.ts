@@ -149,9 +149,9 @@ export const login = TryCatch(async (req, res) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // Must be true in production (HTTPS required)
+    secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    maxAge: 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     path: "/",
   });
 
@@ -189,10 +189,9 @@ export const refresh = TryCatch(async (req, res) => {
 });
 
 export const logout = TryCatch(async (req, res) => {
-  // Clear the cookie regardless of whether token exists
   res.clearCookie("accessToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // Must be true in production (HTTPS required)
+    secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     path: "/",
   });
