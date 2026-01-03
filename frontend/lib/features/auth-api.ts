@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { logout } from "./auth-slice"
 
 export interface LoginRequest {
   email: string
@@ -37,19 +38,39 @@ export const authApi = createApi({
         url: "/users/login",
         method: "POST",
         body: credentials,
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }),
     }),
     logout: builder.mutation<{ message: string }, void>({
       query: () => ({
         url: "/users/logout",
         method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(logout());
+        } catch (error) {
+          // Optionally dispatch logout even on error if needed
+          console.error("Logout failed:", error);
+        }
+      },
     }),
     register: builder.mutation<RegisterResponse, RegisterRequest>({
       query: (userData) => ({
         url: "/users/new",
         method: "POST",
         body: userData,
+        headers: {
+          "Content-Type": "application/json",
+        },
       }),
     }),
     refresh: builder.query<{ accessToken: string }, void>({
@@ -58,4 +79,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useLoginMutation, useRegisterMutation, useRefreshQuery } = authApi
+export const { useLoginMutation, useRegisterMutation, useRefreshQuery, useLogoutMutation } = authApi

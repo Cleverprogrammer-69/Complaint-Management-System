@@ -1,5 +1,11 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  BaseQueryApi,
+  createApi,
+  FetchArgs,
+  fetchBaseQuery,
+} from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
+import { logout } from "./auth-slice";
 
 export interface Complaint {
   complaint_id: number;
@@ -26,19 +32,26 @@ export interface UpdateComplaintRequest {
   status?: string;
 }
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: "http://localhost:4000/api",
+  credentials: "include",
+});
+
+const baseQueryWithAuth = async (
+  args: string | FetchArgs,
+  api: BaseQueryApi,
+  extraOptions: object
+) => {
+  const result = await baseQuery(args, api, extraOptions);
+  if (result.error && result.error.status === 401) {
+    api.dispatch(logout());
+  }
+  return result;
+};
+
 export const complaintApi = createApi({
   reducerPath: "complaintApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:4000/api",
-    prepareHeaders: async(headers, { getState }) => {
-      const token = await cookieStore.get("accessToken");
-      console.log(token?.value);
-      if (token) {
-        headers.set("Authorization", `Bearer ${token.value}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithAuth,
   tagTypes: ["Complaint"],
   endpoints: (builder) => ({
     getComplaints: builder.query<Complaint[], void>({

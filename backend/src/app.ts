@@ -1,10 +1,15 @@
 import express from "express";
 import { connect } from "./utils/features.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: "*" }));
+app.use(cookieParser()); // Parse cookies
+app.use(cors({
+  origin: 'http://localhost:3000', // Your Next.js frontend URL
+  credentials: true, // Allow cookies to be sent and received
+}));
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");

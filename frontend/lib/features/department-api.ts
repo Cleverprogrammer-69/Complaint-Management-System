@@ -1,22 +1,36 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { logout } from "./auth-slice";
 
 export interface Department {
-  deptt_id: number
-  deptt_name: string
+  deptt_id: number;
+  deptt_name: string;
 }
 
 export interface CreateDepartmentRequest {
-  deptt_name: string
+  deptt_name: string;
 }
 
 export interface UpdateDepartmentRequest {
-  id: number
-  deptt_name: string
+  id: number;
+  deptt_name: string;
 }
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: "http://localhost:4000/api",
+  credentials: "include",
+});
+
+const baseQueryWithAuth = async (args, api, extraOptions) => {
+  const result = await baseQuery(args, api, extraOptions);
+  if (result.error && result.error.status === 401) {
+    api.dispatch(logout());
+  }
+  return result;
+};
 
 export const departmentApi = createApi({
   reducerPath: "departmentApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4000/api" }),
+  baseQuery: baseQueryWithAuth,
   tagTypes: ["Department"],
   endpoints: (builder) => ({
     getDepartments: builder.query<Department[], void>({
@@ -51,7 +65,7 @@ export const departmentApi = createApi({
       invalidatesTags: ["Department"],
     }),
   }),
-})
+});
 
 export const {
   useGetDepartmentsQuery,
@@ -59,4 +73,4 @@ export const {
   useCreateDepartmentMutation,
   useUpdateDepartmentMutation,
   useDeleteDepartmentMutation,
-} = departmentApi
+} = departmentApi;

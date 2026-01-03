@@ -76,7 +76,7 @@ export default function ComplaintsPage() {
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="size-12 text-destructive mb-4" />
             <p className="text-lg font-medium text-destructive">Failed to load complaints</p>
-            <p className="text-sm text-muted-foreground mb-4">Please check if the backend server is running</p>
+            <p className="text-sm text-muted-foreground mb-4">Please check if the backend server is running or refresh the page.</p>
             <Button variant="outline" onClick={() => refetch()}>
               Try Again
             </Button>

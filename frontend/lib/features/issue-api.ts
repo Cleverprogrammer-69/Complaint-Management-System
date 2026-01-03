@@ -1,22 +1,36 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { logout } from "./auth-slice";
 
 export interface Issue {
-  issue_id: number
-  issue_type: string
+  issue_id: number;
+  issue_type: string;
 }
 
 export interface CreateIssueRequest {
-  issue_type: string
+  issue_type: string;
 }
 
 export interface UpdateIssueRequest {
-  id: number
-  issue_type: string
+  id: number;
+  issue_type: string;
 }
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: "http://localhost:4000/api",
+  credentials: "include",
+});
+
+const baseQueryWithAuth = async (args, api, extraOptions) => {
+  const result = await baseQuery(args, api, extraOptions);
+  if (result.error && result.error.status === 401) {
+    api.dispatch(logout());
+  }
+  return result;
+};
 
 export const issueApi = createApi({
   reducerPath: "issueApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4000/api" }),
+  baseQuery: baseQueryWithAuth,
   tagTypes: ["Issue"],
   endpoints: (builder) => ({
     getIssues: builder.query<Issue[], void>({
@@ -51,7 +65,7 @@ export const issueApi = createApi({
       invalidatesTags: ["Issue"],
     }),
   }),
-})
+});
 
 export const {
   useGetIssuesQuery,
@@ -59,4 +73,4 @@ export const {
   useCreateIssueMutation,
   useUpdateIssueMutation,
   useDeleteIssueMutation,
-} = issueApi
+} = issueApi;

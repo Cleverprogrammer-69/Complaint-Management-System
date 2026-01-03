@@ -21,7 +21,7 @@ import type { RootState } from "@/lib/store"
 import { issueApi } from "@/lib/features/issue-api"
 import { complaintApi } from "@/lib/features/complaint-api"
 import { departmentApi } from "@/lib/features/department-api"
-import { authApi } from "@/lib/features/auth-api"
+import { authApi, useLogoutMutation } from "@/lib/features/auth-api"
 import { roleApi } from "@/lib/features/role-api"
 import { userApi } from "@/lib/features/user-api"
 
@@ -39,8 +39,9 @@ export function HeaderNav() {
   const router = useRouter()
   const dispatch = useDispatch()
   const { user } = useSelector((state: RootState) => state.auth)
+  const [logoutUser, ] = useLogoutMutation()
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
     dispatch(issueApi.util.resetApiState())
     dispatch(complaintApi.util.resetApiState())
     dispatch(departmentApi.util.resetApiState())
@@ -48,7 +49,10 @@ export function HeaderNav() {
     dispatch(roleApi.util.resetApiState())
     dispatch(userApi.util.resetApiState())
 
+
     dispatch(logout())
+
+    await logoutUser()
     router.push("/login")
   }
 

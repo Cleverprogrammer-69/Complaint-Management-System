@@ -14,15 +14,11 @@ declare global {
 
 dotenv.config();
 export const authMiddleware = TryCatch(async(req, res, next) => {
-  const header = req.headers.authorization;
+   const token = req.cookies.accessToken;  // Read from HTTP-only cookie instead of header
 
-  if (!header) return next(new ApiError(401, "No token"));
-
-  const token = header.split(" ")[1];
-    console.log(token)
   if (!token) return next(new ApiError(401, "No token"));
 
-  jwt.verify(token, process.env.JWT_ACCESS_SECRET as string, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_ACCESS_SECRET as string, (err: Error | null, decoded: any) => {
     if (err) return next(new ApiError(401, "Invalid token"));
 
     req.user = decoded;

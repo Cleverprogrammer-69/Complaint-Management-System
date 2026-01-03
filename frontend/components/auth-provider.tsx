@@ -1,12 +1,14 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { loadFromStorage } from "@/lib/features/auth-slice";
 import type { RootState } from "@/lib/store";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -14,6 +16,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     dispatch(loadFromStorage());
     setIsLoading(false);
   }, [dispatch]);
+
+  React.useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   if (isLoading) {
     return (
