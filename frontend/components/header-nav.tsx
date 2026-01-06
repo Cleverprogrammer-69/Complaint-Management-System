@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { usePathname, useRouter } from "next/navigation"
-import { User, LogOut } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { usePathname, useRouter } from "next/navigation";
+import { User, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,20 +10,26 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import React from "react"
-import { logout } from "@/lib/features/auth-slice"
-import { useDispatch, useSelector } from "react-redux"
-import type { RootState } from "@/lib/store"
-import { issueApi } from "@/lib/features/issue-api"
-import { complaintApi } from "@/lib/features/complaint-api"
-import { departmentApi } from "@/lib/features/department-api"
-import { authApi, useLogoutMutation } from "@/lib/features/auth-api"
-import { roleApi } from "@/lib/features/role-api"
-import { userApi } from "@/lib/features/user-api"
+} from "@/components/ui/breadcrumb";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ThemeToggle } from "@/components/theme-toggle";
+import React from "react";
+import { logout } from "@/lib/features/auth-slice";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/lib/store";
+import { issueApi } from "@/lib/features/issue-api";
+import { complaintApi } from "@/lib/features/complaint-api";
+import { departmentApi } from "@/lib/features/department-api";
+import { authApi, useLogoutMutation } from "@/lib/features/auth-api";
+import { roleApi } from "@/lib/features/role-api";
+import { userApi } from "@/lib/features/user-api";
 
 const labelMap: Record<string, string> = {
   "issue-def": "Issue Def",
@@ -31,72 +37,71 @@ const labelMap: Record<string, string> = {
   "company-def": "Company Def",
   "role-def": "Role Def",
   "user-def": "User Def",
-  "complaints": "Complaints",
+  complaints: "Complaints",
   "service-def": "Service Def",
-}
+};
 
 export function HeaderNav() {
-  const pathname = usePathname()
-  const router = useRouter()
-  const dispatch = useDispatch()
-  const { user } = useSelector((state: RootState) => state.auth)
-  const [logoutUser, ] = useLogoutMutation()
+  const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [logoutUser] = useLogoutMutation();
 
-  const handleLogout = async() => {
-    dispatch(issueApi.util.resetApiState())
-    dispatch(complaintApi.util.resetApiState())
-    dispatch(departmentApi.util.resetApiState())
-    dispatch(authApi.util.resetApiState())
-    dispatch(roleApi.util.resetApiState())
-    dispatch(userApi.util.resetApiState())
+  const handleLogout = async () => {
+    dispatch(issueApi.util.resetApiState());
+    dispatch(complaintApi.util.resetApiState());
+    dispatch(departmentApi.util.resetApiState());
+    dispatch(authApi.util.resetApiState());
+    dispatch(roleApi.util.resetApiState());
+    dispatch(userApi.util.resetApiState());
 
+    dispatch(logout());
 
-    dispatch(logout())
-
-    await logoutUser()
-    router.push("/login")
-  }
+    await logoutUser();
+    router.push("/login");
+  };
 
   const getUserInitials = () => {
-    if (!user?.name) return "U"
+    if (!user?.name) return "U";
     return user.name
       .split(" ")
       .map((n: string) => n[0])
       .join("")
       .toUpperCase()
-      .slice(0, 2)
-  }
+      .slice(0, 2);
+  };
 
   // Generate breadcrumb items from pathname
   const getBreadcrumbs = () => {
     if (pathname === "/") {
-      return [{ label: "Home", href: "/", isCurrentPage: true }]
+      return [{ label: "Home", href: "/", isCurrentPage: true }];
     }
 
-    const segments = pathname.split("/").filter(Boolean)
-    const breadcrumbs = [{ label: "Home", href: "/", isCurrentPage: false }]
+    const segments = pathname.split("/").filter(Boolean);
+    const breadcrumbs = [{ label: "Home", href: "/", isCurrentPage: false }];
 
-    let currentPath = ""
+    let currentPath = "";
     segments.forEach((segment, index) => {
-      currentPath += `/${segment}`
+      currentPath += `/${segment}`;
       const label =
         labelMap[segment] ||
         segment
           .split("-")
           .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ")
+          .join(" ");
 
       breadcrumbs.push({
         label,
         href: currentPath,
         isCurrentPage: index === segments.length - 1,
-      })
-    })
+      });
+    });
 
-    return breadcrumbs
-  }
+    return breadcrumbs;
+  };
 
-  const breadcrumbs = getBreadcrumbs()
+  const breadcrumbs = getBreadcrumbs();
 
   return (
     <header className="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4">
@@ -108,9 +113,14 @@ export function HeaderNav() {
             <React.Fragment key={crumb.href}>
               <BreadcrumbItem>
                 {crumb.isCurrentPage ? (
-                  <BreadcrumbPage className="font-medium">{crumb.label}</BreadcrumbPage>
+                  <BreadcrumbPage className="font-medium">
+                    {crumb.label}
+                  </BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink href={crumb.href} className="text-muted-foreground hover:text-foreground">
+                  <BreadcrumbLink
+                    href={crumb.href}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
                     {crumb.label}
                   </BreadcrumbLink>
                 )}
@@ -122,7 +132,11 @@ export function HeaderNav() {
       </Breadcrumb>
 
       <div className="ml-auto flex items-center gap-3">
-        <span className="text-sm font-medium hidden sm:block">{user?.name || "User"}</span>
+        <ThemeToggle />
+
+        <span className="text-sm font-medium hidden sm:block">
+          {user?.name || "User"}
+        </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="rounded-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
@@ -137,7 +151,10 @@ export function HeaderNav() {
               <User className="mr-2 size-4" />
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-50" onClick={handleLogout}>
+            <DropdownMenuItem
+              className="text-red-600 focus:text-red-600 focus:bg-red-50"
+              onClick={handleLogout}
+            >
               <LogOut className="mr-2 size-4" />
               Logout
             </DropdownMenuItem>
@@ -145,5 +162,5 @@ export function HeaderNav() {
         </DropdownMenu>
       </div>
     </header>
-  )
+  );
 }

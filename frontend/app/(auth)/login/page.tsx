@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { useLoginMutation } from "@/lib/features/auth-api"
 import { setCredentials } from "@/lib/features/auth-slice"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -50,6 +51,7 @@ export default function LoginPage() {
     <Card className="w-full md:h-full h-screen max-w-md md:mx-4 md:my-20 md:mx-auto">
       <CardHeader className="space-y-1 text-center">
         <CardTitle className="text-2xl font-bold">Complaint Management System</CardTitle>
+        <ThemeToggle />
         <CardDescription>Enter your credentials to sign in to your account</CardDescription>
       </CardHeader>
       <CardContent>
