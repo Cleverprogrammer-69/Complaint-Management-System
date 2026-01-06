@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { IssueForm } from "@/components/issue-form"
+import { IssueForm } from "@/components/forms/issue-form"
 import { useGetIssuesQuery, useDeleteIssueMutation } from "@/lib/features/issue-api"
 import { createColumns, type Issue } from "./columns"
 import { DataTable } from "./data-table"

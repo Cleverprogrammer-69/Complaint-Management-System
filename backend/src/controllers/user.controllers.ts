@@ -131,21 +131,6 @@ export const login = TryCatch(async (req, res) => {
   if (!isMatch) throw new ApiError(401, "Invalid credentials");
 
   const accessToken = generateAccessToken(user);
-  // const refreshToken = generateRefreshToken(user);
-
-  // Save refreshToken in DB (optional but recommended)
-  // await pool.request()
-  //   .input("token", mssql.VarChar, refreshToken)
-  //   .input("id", mssql.Int, user.user_id)
-  //   .query("UPDATE Users SET refresh_token = @token WHERE user_id = @id");
-
-  // // Send cookie
-  // res.cookie("rtk", refreshToken, {
-  //   httpOnly: true,
-  //   secure: true,
-  //   sameSite: "none",
-  //   maxAge: 7 * 24 * 60 * 60 * 1000,
-  // });
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,

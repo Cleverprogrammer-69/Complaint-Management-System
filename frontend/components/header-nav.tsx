@@ -32,6 +32,7 @@ const labelMap: Record<string, string> = {
   "role-def": "Role Def",
   "user-def": "User Def",
   "complaints": "Complaints",
+  "service-def": "Service Def",
 }
 
 export function HeaderNav() {

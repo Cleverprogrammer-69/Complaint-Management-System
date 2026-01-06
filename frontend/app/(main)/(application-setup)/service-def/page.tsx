@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { RoleForm } from "@/components/forms/role-form"
-import { useGetRolesQuery, useDeleteRoleMutation } from "@/lib/features/role-api"
-import { createColumns, type Role } from "./columns"
+import { ServiceForm } from "@/components/forms/service-form"
+import { useGetServicesQuery, useDeleteServiceMutation } from "@/lib/features/service-api"
+import { createColumns, type Service } from "./columns"
 import { DataTable } from "./data-table"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -20,33 +20,33 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
-export default function RoleDefPage() {
-  const [editingRole, setEditingRole] = useState<Role | null>(null)
-  const [deletingRole, setDeletingRole] = useState<Role | null>(null)
-  const { data: roles, isLoading, isError, refetch } = useGetRolesQuery()
-  const [deleteRole, { isLoading: isDeleting }] = useDeleteRoleMutation()
+export default function ServiceDefPage() {
+  const [editingService, setEditingService] = useState<Service | null>(null)
+  const [deletingService, setDeletingService] = useState<Service | null>(null)
+  const { data: services, isLoading, isError, refetch } = useGetServicesQuery()
+  const [deleteService, { isLoading: isDeleting }] = useDeleteServiceMutation()
 
   async function handleDelete() {
-    if (!deletingRole) return
+    if (!deletingService) return
     try {
-      await deleteRole(deletingRole.role_id).unwrap()
-      setDeletingRole(null)
+      await deleteService(deletingService.service_id).unwrap()
+      setDeletingService(null)
     } catch (error) {
-      console.error("Failed to delete role:", error)
+      console.error("Failed to delete service:", error)
     }
   }
 
   const columns = createColumns(
-    (role) => setEditingRole(role),
-    (role) => setDeletingRole(role),
+    (service) => setEditingService(service),
+    (service) => setDeletingService(service),
   )
 
   if (isLoading) {
     return (
       <div className="flex flex-col gap-6 p-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Role Definition</h1>
-          <p className="text-muted-foreground">Manage user roles for your application</p>
+          <h1 className="text-2xl font-bold tracking-tight">Service Definition</h1>
+          <p className="text-muted-foreground">Manage system services</p>
         </div>
         <Card>
           <CardHeader>
@@ -69,13 +69,13 @@ export default function RoleDefPage() {
     return (
       <div className="flex flex-col gap-6 p-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Role Definition</h1>
-          <p className="text-muted-foreground">Manage user roles for your application</p>
+          <h1 className="text-2xl font-bold tracking-tight">Service Definition</h1>
+          <p className="text-muted-foreground">Manage system services</p>
         </div>
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="size-12 text-destructive mb-4" />
-            <p className="text-lg font-medium text-destructive">Failed to load roles</p>
+            <p className="text-lg font-medium text-destructive">Failed to load services</p>
             <p className="text-sm text-muted-foreground mb-4">Please check if the backend server is running</p>
             <Button variant="outline" onClick={() => refetch()}>
               Try Again
@@ -89,41 +89,41 @@ export default function RoleDefPage() {
   return (
     <div className="flex flex-col gap-6 p-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Role Definition</h1>
-        <p className="text-muted-foreground">Manage user roles for your application</p>
+        <h1 className="text-2xl font-bold tracking-tight">Service Definition</h1>
+        <p className="text-muted-foreground">Manage system services</p>
       </div>
 
-      <RoleForm editingRole={editingRole} onCancelEdit={() => setEditingRole(null)} />
+      <ServiceForm editingService={editingService} onCancelEdit={() => setEditingService(null)} />
 
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <List className="size-5" />
-            Roles List
+            Services List
           </CardTitle>
           <CardDescription>
-            {roles?.length ?? 0} role{(roles?.length ?? 0) !== 1 && "s"} found
+            {services?.length ?? 0} service{(services?.length ?? 0) !== 1 && "s"} found
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {roles && roles.length > 0 ? (
-            <DataTable columns={columns} data={roles} />
+          {services && services.length > 0 ? (
+            <DataTable columns={columns} data={services} />
           ) : (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <AlertCircle className="size-12 text-muted-foreground mb-4" />
-              <p className="text-lg font-medium">No roles found</p>
-              <p className="text-sm text-muted-foreground">Create your first role using the form above</p>
+              <p className="text-lg font-medium">No services found</p>
+              <p className="text-sm text-muted-foreground">Create your first service using the form above</p>
             </div>
           )}
         </CardContent>
       </Card>
 
-      <AlertDialog open={!!deletingRole} onOpenChange={() => setDeletingRole(null)}>
+      <AlertDialog open={!!deletingService} onOpenChange={() => setDeletingService(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Role</AlertDialogTitle>
+            <AlertDialogTitle>Delete Service</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete &quot;{deletingRole?.role_name}&quot;? This action cannot be undone.
+              Are you sure you want to delete &quot;{deletingService?.name}&quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

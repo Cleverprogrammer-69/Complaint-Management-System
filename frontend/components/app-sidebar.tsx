@@ -16,7 +16,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-import { SearchForm } from "@/components/search-form";
+import { SearchForm } from "@/components/forms/search-form";
 // import { VersionSwitcher } from "@/components/version-switcher"
 import {
   Collapsible,
@@ -52,6 +52,7 @@ const data = {
         { title: "Department Def", url: "/department-def", icon: Building2 },
         { title: "Company Def", url: "/company-def", icon: Building },
         { title: "Role Def", url: "/role-def", icon: ShieldCheck },
+        { title: "Service Def", url: "/service-def", icon: GalleryVerticalEnd },
         { title: "User Def", url: "/user-def", icon: Users },
       ],
     },

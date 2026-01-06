@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { UserForm } from "@/components/user-form"
+import { UserForm } from "@/components/forms/user-form"
 import { useGetUsersQuery, useDeleteUserMutation } from "@/lib/features/user-api"
 import { createColumns, type User } from "./columns"
 import { DataTable } from "./data-table"

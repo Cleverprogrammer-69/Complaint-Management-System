@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ComplaintForm } from "@/components/complaint-form"
+import { ComplaintForm } from "@/components/forms/complaint-form"
 import { useGetComplaintsQuery, useDeleteComplaintMutation, type Complaint } from "@/lib/features/complaint-api"
 import { createColumns } from "./columns"
 import { DataTable } from "./data-table"

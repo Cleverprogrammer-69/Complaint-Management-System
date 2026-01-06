@@ -31,14 +31,14 @@ import departmentRoutes from "./routes/department.routes.js";
 import complaintRoutes from "./routes/complaint.routes.js";
 import roleRoutes from "./routes/role.routes.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
-import serviceTypeRoutes from "./routes/serviceType.routes.js";
+import serviceRoutes from "./routes/service.routes.js";
 import userRoutes from "./routes/user.routes.js";
 
 app.use("/api/issues", issueRoutes);
 app.use("/api/departments", departmentRoutes);
 app.use("/api/complaints", complaintRoutes);
 app.use("/api/roles", roleRoutes);
-app.use("/api/service-types", serviceTypeRoutes);
+app.use("/api/services", serviceRoutes);
 app.use("/api/users", userRoutes);
 
 app.use(errorMiddleware);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { DepartmentForm } from "@/components/department-form";
+import { DepartmentForm } from "@/components/forms/department-form";
 import {
   useGetDepartmentsQuery,
   useDeleteDepartmentMutation,

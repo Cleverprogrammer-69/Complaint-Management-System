@@ -5,6 +5,7 @@ import { departmentApi } from "./features/department-api"
 import { authApi } from "./features/auth-api"
 import { roleApi } from "./features/role-api"
 import { userApi } from "./features/user-api"
+import { serviceApi } from "./features/service-api"
 import authReducer from "./features/auth-slice"
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
     [departmentApi.reducerPath]: departmentApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [roleApi.reducerPath]: roleApi.reducer,
+    [serviceApi.reducerPath]: serviceApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -24,6 +26,7 @@ export const store = configureStore({
       .concat(departmentApi.middleware)
       .concat(authApi.middleware)
       .concat(roleApi.middleware)
+      .concat(serviceApi.middleware)
       .concat(userApi.middleware),
 })
 
