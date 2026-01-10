@@ -7,8 +7,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); // Parse cookies
 app.use(cors({
-  origin: 'http://localhost:3000', // Your Next.js frontend URL
-  credentials: true, // Allow cookies to be sent and received
+  origin: '*',
+  credentials: true,
 }));
 
 app.get("/", (req, res) => {
@@ -33,6 +33,7 @@ import roleRoutes from "./routes/role.routes.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import serviceRoutes from "./routes/service.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import resolverRoutes from "./routes/resolver.routes.js";
 
 app.use("/api/issues", issueRoutes);
 app.use("/api/departments", departmentRoutes);
@@ -40,6 +41,8 @@ app.use("/api/complaints", complaintRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/resolvers", resolverRoutes);
+
 
 app.use(errorMiddleware);
 app.listen(PORT, () => {

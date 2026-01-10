@@ -122,7 +122,7 @@ export const login = TryCatch(async (req, res) => {
   const userResult = await pool
     .request()
     .input("email", mssql.VarChar, email)
-    .query("SELECT * FROM Users WHERE email = @email");
+    .query("SELECT u.*, r.role_name FROM Users u JOIN Roles r ON u.role_id = r.role_id WHERE email = @email");
 
   const user = userResult.recordset[0];
   if (!user) throw new ApiError(401, "Invalid credentials");
@@ -182,3 +182,5 @@ export const logout = TryCatch(async (req, res) => {
   });
   res.json({ message: "Logged out successfully" });
 });
+
+
