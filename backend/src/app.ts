@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); // Parse cookies
 app.use(cors({
-  origin: '*',
+  origin: 'http://localhost:3000',
   credentials: true,
 }));
 
