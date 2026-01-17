@@ -6,6 +6,7 @@ import { authApi } from "./features/auth-api"
 import { roleApi } from "./features/role-api"
 import { userApi } from "./features/user-api"
 import { serviceApi } from "./features/service-api"
+import { resolverApi } from "./features/resolver-api"
 import authReducer from "./features/auth-slice"
 
 export const store = configureStore({
@@ -18,6 +19,7 @@ export const store = configureStore({
     [roleApi.reducerPath]: roleApi.reducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [resolverApi.reducerPath]: resolverApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -27,7 +29,8 @@ export const store = configureStore({
       .concat(authApi.middleware)
       .concat(roleApi.middleware)
       .concat(serviceApi.middleware)
-      .concat(userApi.middleware),
+      .concat(userApi.middleware)
+      .concat(resolverApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

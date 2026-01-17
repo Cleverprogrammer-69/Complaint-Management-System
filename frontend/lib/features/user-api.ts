@@ -1,32 +1,33 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import type { RootState } from "../store"
-import { logout } from "./auth-slice"
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { resolverApi } from "./resolver-api";
+import type { RootState } from "../store";
+import { logout } from "./auth-slice";
 
 export interface User {
-  user_id: number
-  name: string
-  phone: string
-  email: string
-  role_id: number
-  role_name?: string
-  is_team_member: boolean
+  user_id: number;
+  name: string;
+  phone: string;
+  email: string;
+  role_id: number;
+  role_name?: string;
+  is_team_member: boolean;
 }
 
 export interface CreateUserRequest {
-  name: string
-  phone: string
-  email: string
-  role_id: number
-  is_team_member: boolean
+  name: string;
+  phone: string;
+  email: string;
+  role_id: number;
+  is_team_member: boolean;
 }
 
 export interface UpdateUserRequest {
-  id: number
-  name: string
-  phone: string
-  email: string
-  role_id: number
-  is_team_member: boolean
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  role_id: number;
+  is_team_member: boolean;
 }
 
 const baseQuery = fetchBaseQuery({
@@ -56,7 +57,10 @@ export const userApi = createApi({
       query: (id) => `/users/${id}`,
       providesTags: (_result, _error, id) => [{ type: "User", id }],
     }),
-    createUser: builder.mutation<{ message: string; user_id: number }, CreateUserRequest>({
+    createUser: builder.mutation<
+      { message: string; user_id: number },
+      CreateUserRequest
+    >({
       query: (body) => ({
         url: "/users/new",
         method: "POST",
@@ -71,6 +75,13 @@ export const userApi = createApi({
         body,
       }),
       invalidatesTags: ["User"],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(resolverApi.util.invalidateTags(["Resolver"]));
+        } catch {
+        }
+      },
     }),
     deleteUser: builder.mutation<{ message: string }, number>({
       query: (id) => ({
@@ -80,7 +91,7 @@ export const userApi = createApi({
       invalidatesTags: ["User"],
     }),
   }),
-})
+});
 
 export const {
   useGetUsersQuery,
@@ -88,4 +99,4 @@ export const {
   useCreateUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
-} = userApi
+} = userApi;

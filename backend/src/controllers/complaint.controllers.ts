@@ -16,7 +16,7 @@ export const createComplaint = TryCatch(async (req, res, next) => {
         throw new ApiError(400, "complaint_detail cannot be empty");
     }
 
-    if (!status) status = "Pending"; // default status
+    if (!status) status = "PENDING"; // default status
 
     const pool = await connect();
     await pool.request()
@@ -24,7 +24,7 @@ export const createComplaint = TryCatch(async (req, res, next) => {
         .input("issue_id", mssql.Int, issue_id)
         .input("user_id", mssql.Int, user_id)
         .input("complaint_detail", mssql.NVarChar, complaint_detail)
-        .input("status", mssql.VarChar, status)
+        .input("status", mssql.VarChar, status.toUpperCase())
         .query(`
             INSERT INTO Complaints (department_id, issue_id, user_id, complaint_detail, status)
             VALUES (@department_id, @issue_id, @user_id, @complaint_detail, @status)
@@ -136,7 +136,7 @@ export const updateComplaint = TryCatch(async (req, res, next) => {
         setClauses.push("complaint_detail = @complaint_detail");
     }
     if (status !== undefined) {
-        request.input("status", mssql.VarChar, status);
+        request.input("status", mssql.VarChar, status.toUpperCase());
         setClauses.push("status = @status");
     }
 

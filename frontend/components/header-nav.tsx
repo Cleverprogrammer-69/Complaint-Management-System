@@ -37,8 +37,10 @@ const labelMap: Record<string, string> = {
   "company-def": "Company Def",
   "role-def": "Role Def",
   "user-def": "User Def",
-  complaints: "Complaints",
+  "complaints": "Complaints",
   "service-def": "Service Def",
+  "resolver-management": "Resolver Management",
+  "resolver-tasks": "Resolver Tasks",
 };
 
 export function HeaderNav() {
@@ -147,6 +149,9 @@ export function HeaderNav() {
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuItem disabled>
+              <span className="font-medium m-auto">{user?.role || "No role"}</span>
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <User className="mr-2 size-4" />
               Profile

@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { ServiceForm } from "@/components/forms/service-form"
-import { useGetServicesQuery, useDeleteServiceMutation } from "@/lib/features/service-api"
-import { createColumns, type Service } from "./columns"
+import { useGetServicesQuery, useDeleteServiceMutation, type Service } from "@/lib/features/service-api"
+import { createColumns } from "./columns"
 import { DataTable } from "./data-table"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/alert-dialog"
 
 export default function ServiceDefPage() {
-  const [editingService, setEditingService] = useState<Service | null>(null)
+  const [editingService, setEditingService] = useState<(Service & { issue_id?: number }) | null>(null)
   const [deletingService, setDeletingService] = useState<Service | null>(null)
   const { data: services, isLoading, isError, refetch } = useGetServicesQuery()
   const [deleteService, { isLoading: isDeleting }] = useDeleteServiceMutation()
@@ -37,8 +37,8 @@ export default function ServiceDefPage() {
   }
 
   const columns = createColumns(
-    (service) => setEditingService(service),
-    (service) => setDeletingService(service),
+    (service) => setEditingService(service as Service & { issue_id?: number }),
+    (service) => setDeletingService(service as Service),
   )
 
   if (isLoading) {
@@ -123,7 +123,7 @@ export default function ServiceDefPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Service</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete &quot;{deletingService?.name}&quot;? This action cannot be undone.
+              Are you sure you want to delete &quot;{deletingService?.service_name}&quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

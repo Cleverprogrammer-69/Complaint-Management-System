@@ -14,6 +14,8 @@ import {
   Home,
   AlertOctagon,
   ShieldCheck,
+  ToolCase,
+  WrenchIcon
 } from "lucide-react";
 
 import { SearchForm } from "@/components/forms/search-form";
@@ -42,6 +44,7 @@ const data = {
     { title: "Home", url: "/", icon: Home },
     { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
     { title: "Complaints", url: "/complaints", icon: AlertOctagon },
+    { title: "Resolver Tasks", url: "/resolver-tasks", icon: WrenchIcon },
   ],
   navMain: [
     {
@@ -54,6 +57,8 @@ const data = {
         { title: "Role Def", url: "/role-def", icon: ShieldCheck },
         { title: "Service Def", url: "/service-def", icon: GalleryVerticalEnd },
         { title: "User Def", url: "/user-def", icon: Users },
+        { title: "Resolver Management", url: "/resolver-management", icon: ToolCase },
+        
       ],
     },
   ],

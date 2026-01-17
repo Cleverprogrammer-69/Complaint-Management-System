@@ -136,8 +136,14 @@ export const login = TryCatch(async (req, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 10 * 60 * 60 * 1000, // 10 hours
     path: "/",
+  });
+  res.cookie("userRole", user.role_name, {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 10 * 60 * 60 * 1000, // 10 hours
   });
 
   res.json({
@@ -146,7 +152,7 @@ export const login = TryCatch(async (req, res) => {
     user: {
       id: user.user_id,
       name: user.name,
-      role: user.role,
+      role: user.role_name,
     },
   });
 });
@@ -179,6 +185,11 @@ export const logout = TryCatch(async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     path: "/",
+  });
+  res.clearCookie("userRole", {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
   res.json({ message: "Logged out successfully" });
 });

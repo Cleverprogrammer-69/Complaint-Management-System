@@ -24,10 +24,10 @@ export const assignJobToResolver = TryCatch(async (req, res) => {
   const deptIds = Array.isArray(department_ids) ? department_ids : [];
   const serviceIds = Array.isArray(service_ids) ? service_ids : [];
 
-  if (deptIds.length === 0 && serviceIds.length === 0) {
+  if (deptIds.length === 0 || serviceIds.length === 0) {
     throw new ApiError(
       400,
-      "At least one department or service must be assigned."
+      "At least one department and one service must be assigned."
     );
   }
 
@@ -130,8 +130,138 @@ export const getAllResolversWithJobs = TryCatch(async (req, res) => {
   if (result.recordset.length === 0) {
     throw new ApiError(404, "No resolvers found.");
   }
+  res.json(result.recordset);
+});
+
+export const getOneResolverWithJobsById = TryCatch(async (req, res) => {
+  const { resolverId } = req.params;
+  const pool = await connect();
+  const result = await pool.request()
+    .input("resolverId", mssql.Int, resolverId)
+    .query(`
+      SELECT 
+        u.user_id, 
+        u.name, 
+        u.email, 
+        u.created_at,
+        r.role_name,
+        srv.services,
+        dept.departments
+      FROM Users u
+      JOIN Roles r ON u.role_id = r.role_id
+-- Subquery for unique services
+      LEFT JOIN (
+        SELECT us.user_id, 
+          STRING_AGG(s.service_name, ', ') AS services
+        FROM UserServiceAccess us
+        JOIN Services s ON us.service_id = s.service_id
+        GROUP BY us.user_id
+      ) srv ON u.user_id = srv.user_id
+-- Subquery for unique departments
+      LEFT JOIN (
+        SELECT ud.user_id, 
+          STRING_AGG(d.deptt_name, ', ') AS departments
+        FROM UserDepartmentAccess ud
+        JOIN Departments d ON ud.department_id = d.deptt_id
+        GROUP BY ud.user_id
+      ) dept ON u.user_id = dept.user_id
+  WHERE u.user_id = @resolverId AND r.role_name = 'RESOLVER';
+
+    `);
+  if (result.recordset.length === 0) {
+    throw new ApiError(404, "No resolvers found.");
+  }
   res.status(200).json({
     success: true,
     data: result.recordset,
   });
+});
+
+export const getOneResolverTasks = TryCatch(async (req, res) => {
+  
+  const {resolverId} = req.params;
+  console.log(resolverId)
+  const pool = await connect();
+  const result = await pool.request()
+    .input("resolverId", mssql.Int, resolverId)
+    .query(`
+      SELECT DISTINCT
+    c.complaint_id,
+    c.complaint_detail,
+    c.status,
+    c.created_at,
+    d.deptt_name,
+    s.service_name,
+    u.name AS complaint_by
+FROM Complaints c
+JOIN Departments d
+    ON c.department_id = d.deptt_id
+JOIN Issues i
+    ON c.issue_id = i.issue_id
+JOIN Services s
+    ON s.issue_id = i.issue_id
+JOIN UserDepartmentAccess uda
+    ON uda.department_id = c.department_id
+JOIN UserServiceAccess usa
+    ON usa.service_id = s.service_id
+JOIN Users u
+    ON c.user_id = u.user_id
+WHERE
+    - uda.user_id = @resolverId
+    AND usa.user_id = @resolverId
+ORDER BY c.created_at DESC;
+
+
+
+    `);
+  if (result.recordset.length === 0) {
+    throw new ApiError(404, "No resolvers found.");
+  }
+  res.status(200).json({
+    success: true,
+    data: result.recordset,
+  })
+});
+
+export const getMyAllTasks =TryCatch(async (req, res) => {
+  
+  const resolverId = req.user.id;
+  console.log(resolverId)
+  const pool = await connect();
+  const result = await pool.request()
+    .input("resolverId", mssql.Int, resolverId)
+    .query(`
+      SELECT DISTINCT
+    c.complaint_id,
+    c.complaint_detail,
+    c.status,
+    c.created_at,
+    d.deptt_name,
+    s.service_name,
+    u.name AS complaint_by
+FROM Complaints c
+JOIN Departments d
+    ON c.department_id = d.deptt_id
+JOIN Issues i
+    ON c.issue_id = i.issue_id
+JOIN Services s
+    ON s.issue_id = i.issue_id
+JOIN UserDepartmentAccess uda
+    ON uda.department_id = c.department_id
+JOIN UserServiceAccess usa
+    ON usa.service_id = s.service_id
+JOIN Users u
+    ON c.user_id = u.user_id
+WHERE
+    uda.user_id = @resolverId
+    AND usa.user_id = @resolverId
+ORDER BY c.created_at DESC;
+
+
+
+    `);
+  if (result.recordset.length === 0) {
+    throw new ApiError(404, "No resolver found.");
+  }
+  res.json(result.recordset)
 });
