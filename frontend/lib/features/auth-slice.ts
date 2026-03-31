@@ -40,7 +40,7 @@ const authSlice = createSlice({
       if (typeof window !== "undefined") {
         localStorage.removeItem("accessToken")
         localStorage.removeItem("user")
-        cookieStore.delete("accessToken")
+        // cookieStore.delete("accessToken")
       }
     },
     loadFromStorage: (state) => {

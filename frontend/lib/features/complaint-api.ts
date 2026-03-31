@@ -54,6 +54,10 @@ export const complaintApi = createApi({
   baseQuery: baseQueryWithAuth,
   tagTypes: ["Complaint"],
   endpoints: (builder) => ({
+    getAllComplaints: builder.query<Complaint[], void>({
+      query: () => "/complaints",
+      providesTags: ["Complaint"],
+    }),
     getComplaints: builder.query<Complaint[], void>({
       query: () => "/complaints/my-complaints",
       providesTags: ["Complaint"],
@@ -95,6 +99,7 @@ export const complaintApi = createApi({
 });
 
 export const {
+  useGetAllComplaintsQuery,
   useGetComplaintsQuery,
   useGetComplaintQuery,
   useCreateComplaintMutation,

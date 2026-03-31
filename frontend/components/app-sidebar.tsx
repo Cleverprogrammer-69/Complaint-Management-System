@@ -1,8 +1,9 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Cookies from "js-cookie";
 import {
   ChevronRight,
   LayoutDashboard,
@@ -15,7 +16,7 @@ import {
   AlertOctagon,
   ShieldCheck,
   ToolCase,
-  WrenchIcon
+  WrenchIcon,
 } from "lucide-react";
 
 import { SearchForm } from "@/components/forms/search-form";
@@ -37,19 +38,36 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { can } from "@/lib/permissions";
 
 // Navigation data
 const data = {
   standaloneItems: [
-    { title: "Home", url: "/", icon: Home },
-    { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-    { title: "Complaints", url: "/complaints", icon: AlertOctagon },
-    { title: "Resolver Tasks", url: "/resolver-tasks", icon: WrenchIcon },
+    { title: "Home", url: "/", icon: Home, action: "dashboard" },
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
+      action: "dashboard",
+    },
+    {
+      title: "Complaints",
+      url: "/complaints",
+      icon: AlertOctagon,
+      action: "complaints",
+    },
+    {
+      title: "Resolver Tasks",
+      url: "/resolver-tasks",
+      icon: WrenchIcon,
+      action: "resolver_tasks",
+    },
   ],
   navMain: [
     {
       title: "Application Setup",
       url: "#",
+      action: "app_setup",
       items: [
         { title: "Issue Def", url: "/issue-def", icon: AlertCircle },
         { title: "Department Def", url: "/department-def", icon: Building2 },
@@ -57,8 +75,11 @@ const data = {
         { title: "Role Def", url: "/role-def", icon: ShieldCheck },
         { title: "Service Def", url: "/service-def", icon: GalleryVerticalEnd },
         { title: "User Def", url: "/user-def", icon: Users },
-        { title: "Resolver Management", url: "/resolver-management", icon: ToolCase },
-        
+        {
+          title: "Resolver Management",
+          url: "/resolver-management",
+          icon: ToolCase,
+        },
       ],
     },
   ],
@@ -66,30 +87,32 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  const [searchQuery, setSearchQuery] = React.useState("");
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const role = Cookies.get("userRole") || "";
+  console.log("user role: ", role);
   // Filter navigation items based on search query
-  const filteredNavMain = React.useMemo(() => {
-    if (!searchQuery.trim()) return data.navMain;
-
+  const filteredNavMain = useMemo(() => {
     return data.navMain
+      .filter((section) => can(role, section.action)) // Hide entire section if no permission
       .map((section) => ({
         ...section,
         items: section.items.filter((item) =>
-          item.title.toLowerCase().includes(searchQuery.toLowerCase())
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()),
         ),
       }))
       .filter((section) => section.items.length > 0);
-  }, [searchQuery]);
+  }, [searchQuery, role]);
 
   // Filter standalone items based on search query
-  const filteredStandaloneItems = React.useMemo(() => {
-    if (!searchQuery.trim()) return data.standaloneItems;
-
-    return data.standaloneItems.filter((item) =>
-      item.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery]);
+  const filteredStandaloneItems = useMemo(() => {
+    return data.standaloneItems.filter((item) => {
+      const matchesSearch = item.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const hasPermission = can(role, item.action);
+      return matchesSearch && hasPermission;
+    });
+  }, [searchQuery, role]);
 
   return (
     <Sidebar {...props}>
