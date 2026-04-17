@@ -37,7 +37,7 @@ const labelMap: Record<string, string> = {
   "company-def": "Company Def",
   "role-def": "Role Def",
   "user-def": "User Def",
-  "complaints": "Complaints",
+  "complaints": "My Complaints",
   "service-def": "Service Def",
   "resolver-management": "Resolver Management",
   "resolver-tasks": "Resolver Tasks",

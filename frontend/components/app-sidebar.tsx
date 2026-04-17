@@ -51,10 +51,16 @@ const data = {
       action: "dashboard",
     },
     {
-      title: "Complaints",
+      title: "My Complaints",
       url: "/complaints",
       icon: AlertOctagon,
       action: "complaints",
+    },
+    {
+      title: "All Complaints",
+      url: "/complaints/all",
+      icon: AlertOctagon,
+      action: "all_complaints",
     },
     {
       title: "Resolver Tasks",

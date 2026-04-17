@@ -45,7 +45,6 @@ export const createColumns = (
     },
     cell: ({ row }) => <div className="font-medium">{row.getValue("complaint_id")}</div>,
   },
-  
   {
     accessorKey: "deptt_name",
     header: ({ column }) => {

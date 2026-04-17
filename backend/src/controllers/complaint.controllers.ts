@@ -38,10 +38,11 @@ export const getComplaints = TryCatch(async (req, res, next) => {
     const pool = await connect();
     const result = await pool.request().query(`
         SELECT c.complaint_id, c.complaint_detail, c.status, c.created_at, c.updated_at,
-               d.deptt_name, i.issue_type
+               d.deptt_name, i.issue_type, u.name AS user_name
         FROM Complaints c
         JOIN Departments d ON c.department_id = d.deptt_id
         JOIN Issues i ON c.issue_id = i.issue_id
+        JOIN Users u ON c.user_id = u.user_id
     `);
 
     res.json(result.recordset);
