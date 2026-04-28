@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
 import { logout } from "./auth-slice";
-
+import { baseQuery } from "../baseQuery";
 
 export interface Resolver {
   user_id: number
@@ -34,10 +34,10 @@ export interface AssignResolverRequest {
   service_ids: number[];
 }
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:4000/api",
-  credentials: "include",
-});
+// const baseQuery = fetchBaseQuery({
+//   baseUrl: "http://localhost:4000/api",
+//   credentials: "include",
+// });
 
 const baseQueryWithAuth = async (
   args: string | FetchArgs,

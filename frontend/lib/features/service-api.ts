@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import type { RootState } from "../store"
 import { logout } from "./auth-slice"
-
+import { baseQuery } from "../baseQuery"
 export interface Service {
   service_id: number
   service_name: string
@@ -20,10 +20,6 @@ export interface UpdateServiceRequest {
   issue_id: number
 }
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:4000/api",
-  credentials: "include",
-});
 
 const baseQueryWithAuth = async (args, api, extraOptions) => {
   const result = await baseQuery(args, api, extraOptions);

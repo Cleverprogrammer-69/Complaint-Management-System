@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { resolverApi } from "./resolver-api";
 import type { RootState } from "../store";
 import { logout } from "./auth-slice";
+import { baseQuery } from "../baseQuery";
 
 export interface User {
   user_id: number;
@@ -29,11 +30,6 @@ export interface UpdateUserRequest {
   role_id: number;
   is_team_member: boolean;
 }
-
-const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:4000/api",
-  credentials: "include",
-});
 
 const baseQueryWithAuth = async (args, api, extraOptions) => {
   const result = await baseQuery(args, api, extraOptions);

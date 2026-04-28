@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
 import { logout } from "./auth-slice";
+import { baseQuery } from "../baseQuery";
 
 export interface Complaint {
   complaint_id: number;
@@ -32,10 +33,6 @@ export interface UpdateComplaintRequest {
   status?: string;
 }
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:4000/api",
-  credentials: "include",
-});
 
 const baseQueryWithAuth = async (
   args: string | FetchArgs,

@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logout } from "./auth-slice";
+import { baseQuery } from "../baseQuery";
 
 export interface Role {
   role_id: number;
@@ -15,10 +16,6 @@ export interface UpdateRoleRequest {
   role_name: string;
 }
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:4000/api",
-  credentials: "include",
-});
 
 const baseQueryWithAuth = async (args, api, extraOptions) => {
   const result = await baseQuery(args, api, extraOptions);

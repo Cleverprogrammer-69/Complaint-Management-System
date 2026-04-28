@@ -2,20 +2,24 @@ import express from "express";
 import { connect } from "./utils/features.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); // Parse cookies
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
-}));
+const origin =
+  process.env.NODE_ENV! === "production"
+    ? `http://${process.env.VPS_IP!}`
+    : "http://localhost:3000";
+
+app.use(cors({ origin: origin, credentials: true }));
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = +process.env.PORT! || 4000;
 
 connect()
   .then((connection) => {
@@ -42,7 +46,6 @@ app.use("/api/roles", roleRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/resolvers", resolverRoutes);
-
 
 app.use(errorMiddleware);
 app.listen(PORT, () => {
