@@ -36,6 +36,7 @@ const baseQueryWithAuth = async (args, api, extraOptions) => {
   if (result.error && result.error.status === 401) {
     api.dispatch(logout());
   }
+  console.log(result)
   return result;
 };
 
@@ -46,6 +47,7 @@ export const userApi = createApi({
   tagTypes: ["User"],
   endpoints: (builder) => ({
     getUsers: builder.query<User[], void>({
+      
       query: () => "/users",
       providesTags: ["User"],
     }),

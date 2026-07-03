@@ -12,5 +12,5 @@ router.post('/new', createComplaint);
 
 router.get('/', hasRole(['ADMIN']), getComplaints);
 router.get('/my-complaints', getUserComplaints);
-router.route('/:id').get(getComplaint).put(updateComplaint).delete(deleteComplaint);
+router.route('/:id').get(getComplaint).put(updateComplaint).delete(hasRole(['ADMIN']),deleteComplaint);
 export default router;

@@ -11,7 +11,10 @@ const statusColors: Record<string, { bg: string; text: string }> = {
   RESOLVED: { bg: "bg-green-500/10", text: "text-green-700 dark:text-green-400" },
 }
 
-export const columns: ColumnDef<ResolverTask>[] = [
+
+export const createColumns = (
+  onResolve: (complaint: ResolverTask) => void,
+): ColumnDef<ResolverTask>[] => [
   {
     accessorKey: "complaint_id",
     header: ({ column }) => (
@@ -61,6 +64,13 @@ export const columns: ColumnDef<ResolverTask>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue("created_at") as string)
       return <span className="text-sm text-muted-foreground">{date.toLocaleDateString()}</span>
+    },
+  },
+  {
+    accessorKey: "action",
+    header: "Created",
+    cell: ({ row }) => {
+      return <Button variant="default" onClick={()=>onResolve(row.original)}>Resolved</Button>
     },
   },
 ]

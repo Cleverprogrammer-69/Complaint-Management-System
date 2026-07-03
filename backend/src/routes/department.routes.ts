@@ -6,10 +6,10 @@ import { hasRole } from '../middlewares/hasRole.middleware.js';
 
 const router = Router();
 const app: Express = router as any;
-app.use(authMiddleware, hasRole(['ADMIN']));
+app.use(authMiddleware);
 
-router.post('/new', createDepartment);
+router.post('/new',hasRole(['ADMIN']), createDepartment);
 
 router.get('/', getDepartments);
-router.route('/:id').get(getDepartment).put(updateDepartment).delete(deleteDepartment);
+router.route('/:id').get(hasRole(['ADMIN']),getDepartment).put(hasRole(['ADMIN']),updateDepartment).delete(hasRole(['ADMIN']),deleteDepartment);
 export default router;

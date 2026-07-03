@@ -48,13 +48,15 @@ export const createUser = TryCatch(async (req, res, next) => {
 });
 
 export const getAllUsers = TryCatch(async (req, res) => {
+  console.log("getallUsers hit")
   const pool = await connect();
+  
   const result = await pool
     .request()
     .query(
       `SELECT u.user_id, u.name, u.email, u.phone, u.password, u.role_id, u.is_team_member, u.updated_at, u.created_at, r.role_name, r.role_id FROM Users u JOIN Roles r ON u.role_id = r.role_id`
     );
-
+    
   res.json(result.recordset);
 });
 

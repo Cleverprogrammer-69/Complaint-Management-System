@@ -255,13 +255,14 @@ JOIN Users u
 WHERE
     uda.user_id = @resolverId
     AND usa.user_id = @resolverId
+    AND c.status = 'PENDING'
 ORDER BY c.created_at DESC;
 
 
 
     `);
-  if (result.recordset.length === 0) {
-    throw new ApiError(404, "No resolver found.");
-  }
+  // if (result.recordset.length === 0) {
+  //   throw new ApiError(404, "No resolver found.");
+  // }
   res.json(result.recordset)
 });

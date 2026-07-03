@@ -11,5 +11,5 @@ router.put('/:resolverId/assignments', hasRole(['ADMIN']), assignJobToResolver);
 router.get('/', hasRole(['ADMIN']), getAllResolversWithJobs);
 router.get('/:resolverId', hasRole(['ADMIN', 'RESOLVER']), getOneResolverWithJobsById);
 router.get('/:resolverId/tasks', hasRole(['ADMIN']), getOneResolverTasks);
-router.get('/tasks/me', hasRole(['RESOLVER, ADMIN']), getMyAllTasks);
+router.get('/tasks/me', hasRole(['RESOLVER', 'ADMIN']), getMyAllTasks);
 export default router;
